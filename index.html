@@ -1,0 +1,80 @@
+<% htmlWebpackPlugin.options.scripts = htmlWebpackPlugin.options.scripts || []%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+</head>
+<body>
+    <h1>Welcome to the fixer.io in page currency converter.</h1>
+    <p>To get started, enter your fixer.io access key, select a currency to convert to, and click the convert button.
+    The initial master currency for the api query in this example page is set to South African Rands.
+    </p>
+    <label for="fixer-api-key">fixer.io access key:</label>
+    <input name="fixer-api-key" id="fixer-api-key" type="text">
+    <select name="currency-to-convert-to" id="currency-to-convert-to">
+        <option value="GBP">British Pounds</option>
+        <option value="USD">American Dollars</option>
+        <option value="AUD">Australian Dollars</option>
+        <option value="ZAR">South African Rands</option>
+    </select>
+    <input id="convert" type="submit" value="Convert">
+    <p>R 8000.00</p>
+    <p>R8000</p>
+    <p>R 800 000 00</p>
+    <p>R 8000, 000</p>
+    <p>WE HAVE OVER 2000</p>
+    <p>
+        <select>
+            <option value="">Price Category</option>
+            <option value="1">Bronze (R 1,500 - R 3,000)</option>
+            <option value="2">Silver (R 3,000 - R 6,000)</option>
+            <option value="3">Gold (R 6,000 - R 8,000)</option>
+            <option value="4">Platinum (R 8,000 - R 18,000)</option>
+            <option value="5">Diamond (R 18,000 - R 30,000)</option>
+            <option value="6">Emerald (R 30,000 - R 45,000)</option>
+            <option value="7">Tanzanite (R 45,000 - R 1,000,000)</option>
+        </select>
+    </p>
+    <p>
+        FROM R 8,000
+    </p>
+    <% for (var chunk in htmlWebpackPlugin.files.chunks) { %><script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script><% } %>
+    <script>
+        window.onload = function() {
+            var currentCurrency = 'ZAR';
+            var currencyConverter = new FixerIoInPageCurrencyConversion.Converter({
+                masterCurrencyCode: 'ZAR',
+                accessKey: '',
+                cacheSeconds: 300
+            });
+            var submitButton = document.getElementById('convert');
+            submitButton.onclick = function() {
+                var apiKey = document.getElementById('fixer-api-key').value;
+                if((!apiKey ||  apiKey.length === 0)) {
+                    alert("Please enter an api key");
+                    return false;
+                } else {
+                    currencyConverter.setAccessKey(apiKey);
+                    currencyConverter.getCurrencyRates().then(function (currencyRates) {
+                        var selectedCurrencyElement = document.getElementById("currency-to-convert-to");
+                        var currencyToConvertTo = selectedCurrencyElement.options[selectedCurrencyElement.selectedIndex].value;
+                        currencyConverter.setCurrencyRates(currencyRates);
+
+                        currencyConverter.replaceCurrencyInstancesInNode(
+                            document.body,
+                            currentCurrency,
+                            currencyToConvertTo
+                        ).then(function(result) {
+                            if(result === true)
+                                currentCurrency = currencyToConvertTo;
+                        });
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
