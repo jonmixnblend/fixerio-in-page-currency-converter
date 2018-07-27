@@ -15,6 +15,7 @@
         "babel-core": "latest",
         "babel-eslint": "latest",
         "babel-loader": "latest",
+        "babel-plugin-transform-runtime": "^6.23.0",
         "babel-preset-env": "latest",
         "chai": "latest",
         "css-loader": "^0.28.10",

@@ -5,7 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = {
     mode: 'development',
-    entry: ["babel-polyfill" ,path.resolve(__dirname, 'src/index.js')],
+    entry: [path.resolve(__dirname, 'src/index.js')],
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         hot: true

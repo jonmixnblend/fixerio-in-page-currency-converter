@@ -5,5 +5,7 @@
                 "browsers": ["last 2 versions", "ie >= 11"]
             }
         }]
-    ]
+    ],
+    "plugins": [
+    ["transform-runtime", {"regenerator": true}]]
 }

@@ -1,6 +1,5 @@
 const axios = require('axios');
 const accounting = require('accounting');
-require("babel-polyfill");
 
 class Converter {
     constructor({
